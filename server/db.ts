@@ -83,13 +83,17 @@ class RelationalDatabase {
           this.seedPlacementDrives();
         }
 
-        console.log(`[DB] Loaded ${this.data.students.length} students, ${this.data.placement_drives.length} drives.`);
+        // Always guarantee all demo users and students exist
+        this.ensureDemoUsersAndStudents();
+
+        console.log(`[DB] Loaded ${this.data.students.length} students, ${this.data.placement_drives.length} drives, ${this.data.users.length} users.`);
         return;
       } catch (err) {
         console.error('[DB] Failed to parse existing db file, re-seeding...', err);
       }
     }
     this.seedDemoData();
+    this.ensureDemoUsersAndStudents();
   }
 
   private save() {
@@ -477,8 +481,439 @@ class RelationalDatabase {
   }
 
   // --- Auth & Users ---
-  public findUserByEmail(email: string) {
-    return this.data.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  public ensureDemoUsersAndStudents() {
+    // 1. Admin Accounts
+    const adminAccounts: (User & { passwordHash: string })[] = [
+      {
+        id: 'usr_admin_1',
+        name: 'Dr. Arvind Kulkarni (TPO Head)',
+        email: 'admin@college.edu',
+        passwordHash: 'admin123',
+        role: 'admin',
+        department: null,
+        batch: null,
+        is_active: true,
+        created_at: '2025-01-10T09:00:00.000Z',
+      },
+      {
+        id: 'usr_admin_apex',
+        name: 'Dr. Arvind Kulkarni (TPO Head)',
+        email: 'admin@apex.edu',
+        passwordHash: 'admin123',
+        role: 'admin',
+        department: null,
+        batch: null,
+        is_active: true,
+        created_at: '2025-01-10T09:00:00.000Z',
+      },
+    ];
+
+    // 2. Coordinators
+    const coordinatorAccounts: (User & { passwordHash: string })[] = [
+      {
+        id: 'usr_coord_1',
+        name: 'Prof. Priya Mehta',
+        email: 'cs.coord@college.edu',
+        passwordHash: 'coord123',
+        role: 'coordinator',
+        department: 'Computer Technology',
+        batch: '2027',
+        is_active: true,
+        created_at: '2025-01-15T10:30:00.000Z',
+      },
+      {
+        id: 'usr_coord_1_apex',
+        name: 'Prof. Priya Mehta',
+        email: 'cs.coord@apex.edu',
+        passwordHash: 'coord123',
+        role: 'coordinator',
+        department: 'Computer Technology',
+        batch: '2027',
+        is_active: true,
+        created_at: '2025-01-15T10:30:00.000Z',
+      },
+      {
+        id: 'usr_coord_2',
+        name: 'Prof. Rajesh Kumar',
+        email: 'it.coord@college.edu',
+        passwordHash: 'coord123',
+        role: 'coordinator',
+        department: 'Information Technology',
+        batch: '2027',
+        is_active: true,
+        created_at: '2025-01-15T11:00:00.000Z',
+      },
+      {
+        id: 'usr_coord_2_apex',
+        name: 'Prof. Rajesh Kumar',
+        email: 'it.coord@apex.edu',
+        passwordHash: 'coord123',
+        role: 'coordinator',
+        department: 'Information Technology',
+        batch: '2027',
+        is_active: true,
+        created_at: '2025-01-15T11:00:00.000Z',
+      },
+      {
+        id: 'usr_coord_3',
+        name: 'Prof. Suresh Patil',
+        email: 'mech.coord@college.edu',
+        passwordHash: 'coord123',
+        role: 'coordinator',
+        department: 'Mechanical',
+        batch: '2027',
+        is_active: true,
+        created_at: '2025-01-16T09:15:00.000Z',
+      },
+      {
+        id: 'usr_coord_3_apex',
+        name: 'Prof. Suresh Patil',
+        email: 'mech.coord@apex.edu',
+        passwordHash: 'coord123',
+        role: 'coordinator',
+        department: 'Mechanical',
+        batch: '2027',
+        is_active: true,
+        created_at: '2025-01-16T09:15:00.000Z',
+      },
+    ];
+
+    // 3. Demo Students
+    const studentAccounts: (User & { passwordHash: string })[] = [
+      {
+        id: 'usr_stu_1',
+        name: 'Rahul Sharma',
+        email: 'rahul.sharma@apex.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Computer Technology',
+        batch: '2027',
+        student_id: 'STU1001',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'usr_stu_1_college',
+        name: 'Rahul Sharma',
+        email: 'rahul.sharma@college.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Computer Technology',
+        batch: '2027',
+        student_id: 'STU1001',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'usr_stu_generic',
+        name: 'Rahul Sharma',
+        email: 'student@apex.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Computer Technology',
+        batch: '2027',
+        student_id: 'STU1001',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'usr_stu_generic_college',
+        name: 'Rahul Sharma',
+        email: 'student@college.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Computer Technology',
+        batch: '2027',
+        student_id: 'STU1001',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'usr_stu_2',
+        name: 'Sanika Joshi',
+        email: 'sanika.joshi@apex.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Information Technology',
+        batch: '2027',
+        student_id: 'STU1002',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'usr_stu_2_college',
+        name: 'Sanika Joshi',
+        email: 'sanika.joshi@college.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Information Technology',
+        batch: '2027',
+        student_id: 'STU1002',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'usr_stu_3',
+        name: 'Rohan Verma',
+        email: 'rohan.verma@apex.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Mechanical',
+        batch: '2027',
+        student_id: 'STU1003',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'usr_stu_3_college',
+        name: 'Rohan Verma',
+        email: 'rohan.verma@college.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Mechanical',
+        batch: '2027',
+        student_id: 'STU1003',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'usr_stu_4',
+        name: 'Ananya Iyer',
+        email: 'ananya.iyer@apex.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Electronics',
+        batch: '2027',
+        student_id: 'STU1004',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'usr_stu_4_college',
+        name: 'Ananya Iyer',
+        email: 'ananya.iyer@college.edu',
+        passwordHash: 'student123',
+        role: 'student',
+        department: 'Electronics',
+        batch: '2027',
+        student_id: 'STU1004',
+        is_active: true,
+        created_at: '2025-01-20T09:00:00.000Z',
+      },
+    ];
+
+    const allEssential = [...adminAccounts, ...coordinatorAccounts, ...studentAccounts];
+    for (const acc of allEssential) {
+      const idx = this.data.users.findIndex((u) => u.email.toLowerCase() === acc.email.toLowerCase());
+      if (idx === -1) {
+        this.data.users.push(acc);
+      } else {
+        this.data.users[idx].passwordHash = acc.passwordHash;
+        this.data.users[idx].is_active = true;
+        if (acc.student_id) this.data.users[idx].student_id = acc.student_id;
+      }
+    }
+
+    // Also ensure demo students exist in this.data.students
+    const demoStudentsList: Student[] = [
+      {
+        id: 'stu_STU1001',
+        student_id: 'STU1001',
+        roll_number: '2023CS001',
+        enrollment_number: 'EN2023CS101',
+        name: 'Rahul Sharma',
+        email: 'rahul.sharma@apex.edu',
+        phone: '+91 9823412345',
+        department: 'Computer Technology',
+        branch: 'Computer Engineering',
+        batch: '2027',
+        cgpa: 8.45,
+        tenth_percentage: 88.0,
+        twelfth_percentage: 85.0,
+        diploma_percentage: null,
+        placement_status: 'Not Placed',
+        company: null,
+        job_role: null,
+        package: null,
+        placement_date: null,
+        placement_type: null,
+        location: null,
+        remarks: 'Registered for campus placement drives',
+        active_backlogs: 0,
+        created_at: '2025-01-20T09:00:00.000Z',
+        updated_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'stu_STU1002',
+        student_id: 'STU1002',
+        roll_number: '2023IT001',
+        enrollment_number: 'EN2023IT102',
+        name: 'Sanika Joshi',
+        email: 'sanika.joshi@apex.edu',
+        phone: '+91 9823412346',
+        department: 'Information Technology',
+        branch: 'Information Technology',
+        batch: '2027',
+        cgpa: 7.75,
+        tenth_percentage: 82.5,
+        twelfth_percentage: 79.0,
+        diploma_percentage: null,
+        placement_status: 'Not Placed',
+        company: null,
+        job_role: null,
+        package: null,
+        placement_date: null,
+        placement_type: null,
+        location: null,
+        remarks: 'Interested in Software Development roles',
+        active_backlogs: 0,
+        created_at: '2025-01-20T09:00:00.000Z',
+        updated_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'stu_STU1003',
+        student_id: 'STU1003',
+        roll_number: '2023ME001',
+        enrollment_number: 'EN2023ME103',
+        name: 'Rohan Verma',
+        email: 'rohan.verma@apex.edu',
+        phone: '+91 9823412347',
+        department: 'Mechanical',
+        branch: 'Mechanical Engineering',
+        batch: '2027',
+        cgpa: 6.40,
+        tenth_percentage: 72.0,
+        twelfth_percentage: 68.5,
+        diploma_percentage: null,
+        placement_status: 'Not Placed',
+        company: null,
+        job_role: null,
+        package: null,
+        placement_date: null,
+        placement_type: null,
+        location: null,
+        remarks: 'Targeting core engineering & tech roles',
+        active_backlogs: 1,
+        created_at: '2025-01-20T09:00:00.000Z',
+        updated_at: '2025-01-20T09:00:00.000Z',
+      },
+      {
+        id: 'stu_STU1004',
+        student_id: 'STU1004',
+        roll_number: '2023EC001',
+        enrollment_number: 'EN2023EC104',
+        name: 'Ananya Iyer',
+        email: 'ananya.iyer@apex.edu',
+        phone: '+91 9823412348',
+        department: 'Electronics',
+        branch: 'Electronics & Telecomm.',
+        batch: '2027',
+        cgpa: 8.90,
+        tenth_percentage: 91.0,
+        twelfth_percentage: 89.0,
+        diploma_percentage: null,
+        placement_status: 'Placed',
+        company: 'Microsoft',
+        job_role: 'Software Engineer',
+        package: 21.0,
+        placement_date: '2026-02-10',
+        placement_type: 'On Campus',
+        location: 'Bengaluru / Hyderabad',
+        remarks: 'Selected in Microsoft campus drive',
+        active_backlogs: 0,
+        created_at: '2025-01-20T09:00:00.000Z',
+        updated_at: '2025-01-20T09:00:00.000Z',
+      },
+    ];
+
+    for (const stu of demoStudentsList) {
+      const existingIdx = this.data.students.findIndex(
+        (s) => s.student_id === stu.student_id || s.email.toLowerCase() === stu.email.toLowerCase()
+      );
+      if (existingIdx === -1) {
+        this.data.students.unshift(stu);
+      } else {
+        this.data.students[existingIdx] = { ...this.data.students[existingIdx], ...stu };
+      }
+    }
+
+    this.save();
+  }
+
+  public addUser(user: User & { passwordHash: string }) {
+    const existingIndex = this.data.users.findIndex(
+      (u) => u.id === user.id || u.email.toLowerCase() === user.email.toLowerCase()
+    );
+    if (existingIndex >= 0) {
+      this.data.users[existingIndex] = { ...this.data.users[existingIndex], ...user };
+    } else {
+      this.data.users.push(user);
+    }
+    this.save();
+    return user;
+  }
+
+  public findUserByEmail(rawEmail: string): (User & { passwordHash: string }) | null {
+    if (!rawEmail) return null;
+    const cleanEmail = rawEmail.trim().toLowerCase();
+
+    // 1. Direct match on email
+    let user = this.data.users.find((u) => u.email.toLowerCase() === cleanEmail);
+    if (user) return user;
+
+    // 2. Domain alias: apex.edu <-> college.edu
+    if (cleanEmail.endsWith('@apex.edu')) {
+      const collegeAlt = cleanEmail.replace('@apex.edu', '@college.edu');
+      user = this.data.users.find((u) => u.email.toLowerCase() === collegeAlt);
+      if (user) return user;
+    } else if (cleanEmail.endsWith('@college.edu')) {
+      const apexAlt = cleanEmail.replace('@college.edu', '@apex.edu');
+      user = this.data.users.find((u) => u.email.toLowerCase() === apexAlt);
+      if (user) return user;
+    }
+
+    // 3. Quick keyword aliases
+    if (cleanEmail === 'admin' || cleanEmail === 'admin@apex.edu' || cleanEmail === 'admin@college.edu') {
+      return this.data.users.find((u) => u.role === 'admin') || null;
+    }
+    if (cleanEmail === 'student' || cleanEmail === 'student@apex.edu' || cleanEmail === 'student@college.edu') {
+      return this.data.users.find((u) => u.id === 'usr_stu_1') || this.data.users.find((u) => u.role === 'student') || null;
+    }
+
+    // 4. Check if cleanEmail matches a student's roll number, student_id, or student email
+    const matchedStudent = this.data.students.find(
+      (s) =>
+        s.email.toLowerCase() === cleanEmail ||
+        s.email.toLowerCase().replace('@college.edu', '@apex.edu') === cleanEmail ||
+        s.email.toLowerCase().replace('@apex.edu', '@college.edu') === cleanEmail ||
+        s.roll_number.toLowerCase() === cleanEmail ||
+        s.student_id.toLowerCase() === cleanEmail
+    );
+
+    if (matchedStudent) {
+      let stuUser = this.data.users.find(
+        (u) => u.student_id === matchedStudent.student_id || u.email.toLowerCase() === matchedStudent.email.toLowerCase()
+      );
+      if (!stuUser) {
+        stuUser = {
+          id: `usr_${matchedStudent.student_id.toLowerCase()}`,
+          name: matchedStudent.name,
+          email: matchedStudent.email,
+          passwordHash: 'student123',
+          role: 'student',
+          department: matchedStudent.department,
+          batch: matchedStudent.batch,
+          student_id: matchedStudent.student_id,
+          is_active: true,
+          created_at: new Date().toISOString(),
+        };
+        this.data.users.push(stuUser);
+        this.save();
+      }
+      return stuUser;
+    }
+
+    return null;
   }
 
   public findUserById(id: string) {

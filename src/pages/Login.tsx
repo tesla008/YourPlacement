@@ -111,9 +111,25 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md px-4 relative z-10">
         <div className="bg-[#111c3a]/90 border border-slate-800 rounded-3xl py-7 px-6 sm:px-9 shadow-2xl backdrop-blur-md">
           {error && (
-            <div className="mb-5 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2 font-medium">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{error}</span>
+            <div className="mb-5 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex flex-col gap-2 font-medium">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                <span>{error}</span>
+              </div>
+              <button
+                type="button"
+                id="reset-demo-credentials-btn"
+                onClick={() => {
+                  if (loginMode === 'student') {
+                    handleQuickFill('rahul.sharma@apex.edu', 'student123', 'student');
+                  } else {
+                    handleQuickFill('admin@apex.edu', 'admin123', 'tpo');
+                  }
+                }}
+                className="self-start text-[11px] font-bold text-blue-400 hover:text-blue-300 underline underline-offset-2 transition"
+              >
+                Auto-fill verified demo credentials →
+              </button>
             </div>
           )}
 
@@ -130,7 +146,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={loginMode === 'student' ? 'student@apex.edu' : 'name@college.edu'}
+                  placeholder={loginMode === 'student' ? 'student@apex.edu' : 'admin@apex.edu'}
                   className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#091024] border border-slate-700/80 text-white text-xs font-medium placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition"
                 />
               </div>
@@ -161,6 +177,12 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
                   className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-[#091024] border border-slate-700/80 text-white text-xs font-medium placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition"
                 />
               </div>
+              <p className="mt-1.5 text-[10px] text-slate-400 flex items-center justify-between">
+                <span>
+                  Demo Pass: <code className="text-blue-300 font-mono font-bold">{loginMode === 'student' ? 'student123' : 'admin123'}</code>
+                </span>
+                <span className="text-slate-500">Coordinators: <code className="text-slate-400 font-mono">coord123</code></span>
+              </p>
             </div>
 
             <button
@@ -194,7 +216,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
                 <button
                   id="demo-fill-admin"
                   type="button"
-                  onClick={() => handleQuickFill('admin@college.edu', 'admin123', 'tpo')}
+                  onClick={() => handleQuickFill('admin@apex.edu', 'admin123', 'tpo')}
                   className="p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/80 text-left transition flex items-start gap-2 group"
                 >
                   <div className="p-1 rounded-lg bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20 transition">
@@ -209,7 +231,7 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
                 <button
                   id="demo-fill-cs-coord"
                   type="button"
-                  onClick={() => handleQuickFill('cs.coord@college.edu', 'coord123', 'tpo')}
+                  onClick={() => handleQuickFill('cs.coord@apex.edu', 'coord123', 'tpo')}
                   className="p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/80 text-left transition flex items-start gap-2 group"
                 >
                   <div className="p-1 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 transition">
@@ -218,6 +240,36 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
                   <div>
                     <p className="text-xs font-bold text-white leading-tight">CS Coord</p>
                     <p className="text-[10px] text-slate-400 font-medium">Computer Dept</p>
+                  </div>
+                </button>
+
+                <button
+                  id="demo-fill-it-coord"
+                  type="button"
+                  onClick={() => handleQuickFill('it.coord@apex.edu', 'coord123', 'tpo')}
+                  className="p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/80 text-left transition flex items-start gap-2 group"
+                >
+                  <div className="p-1 rounded-lg bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20 transition">
+                    <UserCheck className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white leading-tight">IT Coord</p>
+                    <p className="text-[10px] text-slate-400 font-medium">IT Dept</p>
+                  </div>
+                </button>
+
+                <button
+                  id="demo-fill-mech-coord"
+                  type="button"
+                  onClick={() => handleQuickFill('mech.coord@apex.edu', 'coord123', 'tpo')}
+                  className="p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/80 text-left transition flex items-start gap-2 group"
+                >
+                  <div className="p-1 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 transition">
+                    <UserCheck className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white leading-tight">Mech Coord</p>
+                    <p className="text-[10px] text-slate-400 font-medium">Mechanical</p>
                   </div>
                 </button>
               </div>
@@ -250,6 +302,36 @@ export const Login: React.FC<LoginProps> = ({ onSuccess }) => {
                   <div>
                     <p className="text-xs font-bold text-white leading-tight">Sanika Joshi</p>
                     <p className="text-[10px] text-emerald-400 font-medium">7.75 CGPA · IT</p>
+                  </div>
+                </button>
+
+                <button
+                  id="demo-fill-student-rohan"
+                  type="button"
+                  onClick={() => handleQuickFill('rohan.verma@apex.edu', 'student123', 'student')}
+                  className="p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/80 text-left transition flex items-start gap-2 group"
+                >
+                  <div className="p-1 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20 transition">
+                    <GraduationCap className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white leading-tight">Rohan Verma</p>
+                    <p className="text-[10px] text-amber-400 font-medium">6.40 CGPA · Mech</p>
+                  </div>
+                </button>
+
+                <button
+                  id="demo-fill-student-ananya"
+                  type="button"
+                  onClick={() => handleQuickFill('ananya.iyer@apex.edu', 'student123', 'student')}
+                  className="p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/80 text-left transition flex items-start gap-2 group"
+                >
+                  <div className="p-1 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 transition">
+                    <GraduationCap className="w-3.5 h-3.5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white leading-tight">Ananya Iyer</p>
+                    <p className="text-[10px] text-purple-400 font-medium">Placed · ₹21 LPA</p>
                   </div>
                 </button>
               </div>

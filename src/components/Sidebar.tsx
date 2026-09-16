@@ -230,7 +230,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 id="switch-role-rahul"
                 onClick={() => switchDemoRole('student_rahul')}
                 className={`px-2 py-1.5 text-[11px] rounded-lg font-medium flex items-center justify-center gap-1 transition ${
-                  user?.email === 'rahul.sharma@apex.edu'
+                  user?.email?.includes('rahul.sharma')
                     ? 'bg-blue-600 text-white font-bold shadow-xs'
                     : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white'
                 }`}
@@ -241,7 +241,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 id="switch-role-sanika"
                 onClick={() => switchDemoRole('student_sanika')}
                 className={`px-2 py-1.5 text-[11px] rounded-lg font-medium flex items-center justify-center gap-1 transition ${
-                  user?.email === 'sanika.joshi@apex.edu'
+                  user?.email?.includes('sanika.joshi')
                     ? 'bg-blue-600 text-white font-bold shadow-xs'
                     : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white'
                 }`}
@@ -252,7 +252,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 id="switch-role-rohan"
                 onClick={() => switchDemoRole('student_rohan')}
                 className={`px-2 py-1.5 text-[11px] rounded-lg font-medium flex items-center justify-center gap-1 transition ${
-                  user?.email === 'rohan.verma@apex.edu'
+                  user?.email?.includes('rohan.verma')
                     ? 'bg-blue-600 text-white font-bold shadow-xs'
                     : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white'
                 }`}
@@ -263,7 +263,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 id="switch-role-ananya"
                 onClick={() => switchDemoRole('student_ananya')}
                 className={`px-2 py-1.5 text-[11px] rounded-lg font-medium flex items-center justify-center gap-1 transition ${
-                  user?.email === 'ananya.iyer@apex.edu'
+                  user?.email?.includes('ananya.iyer')
                     ? 'bg-blue-600 text-white font-bold shadow-xs'
                     : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-white'
                 }`}
