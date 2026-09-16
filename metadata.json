@@ -1,0 +1,7 @@
+{
+  "name": "Apex Placement Portal",
+  "description": "Comprehensive college placement platform featuring Student Mode for discovering drives, checking academic eligibility, and tracking recruitment milestones, alongside TPO Mode for drive management, shortlisting, and institutional analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
